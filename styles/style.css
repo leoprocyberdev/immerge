@@ -1,0 +1,374 @@
+      body {
+        margin: 0px;
+        padding: 0px;
+        font-family: 'Montserrat', sans-serif;
+        width: 99%;
+        //background-color: black;
+      }
+      .container {
+        padding: 0% 5%;
+        //border: 2px solid #076e3b;
+        //background-color: #076e3b;
+        width: 90%;
+        border-radius: 10px;
+        align-content: center;
+      }
+      .product {
+        //border: 2px solid #076e3b;
+        width: 96%;
+        box-shadow: 2px 2px 5px #000;
+        border-radius: 10px;
+        background-color: #c6c6c6;
+        padding: 15px 0px;
+        margin: 10px 2%;
+      }
+      .product:hover {
+        background-color: #ffa547;
+      }
+      .likebtn {
+        background: none;
+        border: none;
+        outline: none;
+      }
+      h3 {
+        margin-bottom: 0px;
+        padding: 0px;
+      }
+      .span {
+        font-size: 18px;
+        color: green;
+      }
+      .price {
+        font-size: 10px;
+        color: green;
+      }
+      .button {
+        font-size: 18px;
+        color: white;
+      }
+      a, a:visited, a:hover, a:active {
+         text-decoration: none;
+         color: inherit;
+      }
+
+      img {
+        float: left;
+        max-width: 80px;
+        height: 100px;
+        border-radius: 5px;
+        margin: 2px;
+        margin-right: 10px;
+        margin-left: 20px;
+      }
+      header {
+        background-color: #076e3b;
+        position: fixed;
+        top: 0px;
+        color: white;
+        padding: 15px 0px;
+        display: grid;
+        width: 100%;
+        text-align: center;
+        padding-left: 2%;
+        grid-template-columns: 13% 55% 15% 15%;
+      }
+      .title {
+        font-weight: bold;
+        font-size: 24px;
+      }
+      .menu-img {
+        height: 20px;
+        width: 27px;
+      }
+      .menu {
+        display: none;
+      position: fixed;
+      top: 50px;
+      box-shadow: 2px 2px 10px #000;
+      background-color: white;
+      color: black;
+      width: 40%;
+    }
+    .menu-header {
+      color: #fff;
+      background-color: #075211;
+      display: grid;
+      grid-template-columns: 90% 10%;
+      text-align: center;
+      padding: 5px;
+    }
+    .menu-title {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    
+      .search {
+      background-color: #075211;
+      position: fixed;
+      top: 12px;
+      left: 16%;
+      width: 53%;
+      display: none; /* Toggle this with JS */
+      align-items: center; /* Keeps things centered vertically */
+      font-size: 15px;
+      border-radius: 50px;
+      /* Adjusted to 4 columns: [X:10%] [Input:55%] [Mic:15%] [Submit:20%] = 100% */
+      grid-template-columns: 10% 55% 15% 20%;
+      box-shadow: 2px 2px 10px #fff;
+      z-index: 10000;
+}
+
+.search-x {
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      margin: 5px;
+      cursor: pointer;
+}
+
+.search-input {
+      font-size: 15px;
+      outline: none;
+      border: none;
+      background: transparent;
+      color: white;
+      width: 100%;
+}
+
+/* New Mic Icon Style */
+.mic-icon {
+      height: 18px;
+      cursor: pointer;
+      filter: brightness(0) invert(1); /* Makes it white */
+      justify-self: center;
+}
+
+.search-submit {
+      height: 20px;
+      cursor: pointer;
+      text-align: center;
+      padding: 5px;
+      background-color: #075211;
+      border-radius: 0px 50px 50px 0px;
+      filter: brightness(0) invert(1); /* Makes it white */
+      justify-self: center;
+}
+
+
+    .catg-filter {
+      
+      color: #fff;
+      font-size: 15px;
+      position: fixed;
+      bottom: 60px;
+      right: 30%;
+      left: 30%;
+      width: 40%;
+      display: grid;
+      grid-template-columns: 50% 50%;
+      text-align: center;
+      font-weight: bold;
+    }
+    .catg-filter div {
+      background-color: #075211;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 2px;
+    }
+    .catg-filter div:hover {
+      background-color: tomato;
+    }
+    .cartegory-elm {
+      display: none;
+      position: fixed;
+      right: 20%;
+      left: 20%;
+      top: 55px;
+      width: 60%;
+      box-shadow: 2px 2px 10px #000;
+      background-color: #fff;
+    }
+    .catg-elm-header {
+      display: grid;
+      grid-template-columns: 90% 10%;
+      background-color: #075211;
+      color: #fff;
+      text-align: center;
+      padding: 2px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .filter-elm {
+      display: none;
+      position: fixed;
+      right: 16%;
+      left: 24%;
+      top: 60px;
+      width: 60%;
+      box-shadow: 2px 2px 10px #000;
+      background-color: #fff;
+    }
+    .flt-elm-header {
+      display: grid;
+      grid-template-columns: 90% 10%;
+      background-color: #075211;
+      color: #fff;
+      text-align: center;
+      padding: 2px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .search-displayer {
+      height: 24px;
+    }
+  .menu-body li {
+    font-size: 15px;
+    padding: 5px 20px;
+    background-color: #e0d6d4;
+    margin-bottom: 1px;
+  }
+  .menu-body li:hover {
+    background-color: #ea8f5b;
+  }
+  .viewdetails {
+      //margin: 30px 10px;
+     // position: absolute;
+     // margin-bottom: 50px;
+      //right: 5px;
+     //float: right;
+      background-color: green; font-size: 15px; padding: 8px 15px; border-radius: 50px; border: none; outline: none; font-weight: bold; color: #fff;
+  }
+  
+  .price-button-area {
+    display: grid;
+    grid-template-columns: 40% 55% 5%;
+    
+  }
+  .space {
+  height: 50px;
+}
+
+button:hover {
+  background-color: tomato;
+}
+/* Skeleton Loader Styling */
+.skeleton-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+}
+
+.skeleton-img {
+    width: 100%;
+    height: 150px;
+    background: #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.skeleton-text {
+    width: 80%;
+    height: 15px;
+    background: #eee;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.skeleton-text.short {
+    width: 50%;
+}
+
+/* The Shimmer Animation */
+.shimmer {
+    background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.recent-box {
+    position: fixed;
+    top: 55px; /* Directly below the search bar */
+    left: 16%;
+    width: 53%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    display: none; /* Hidden by default */
+    z-index: 9999;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.recent-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.recent-item:last-child { border-bottom: none; }
+
+.recent-item:hover { background: #f9f9f9; }
+
+.recent-title {
+    font-size: 12px;
+    color: #075211;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+.clear-history {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 12px;
+    color: #ff4d4d; /* Red for "clear/delete" */
+    cursor: pointer;
+    border-top: 1px solid #eee;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.clear-history:hover {
+    background-color: #fff5f5;
+}
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #075211;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    cursor: pointer;
+}
+#cart-count {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ff4d4d;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+}

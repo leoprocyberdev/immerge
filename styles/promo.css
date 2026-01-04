@@ -1,0 +1,146 @@
+.carousel-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding: 20px 0;
+    /* REMOVE scroll-behavior: smooth; from here if you have it! */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; /* Required for smooth mobile swiping */
+}
+
+
+
+
+/* Hide scrollbar for Chrome/Safari */
+.carousel-container::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* --- INDIVIDUAL PRODUCT CARDS --- */
+.promoted-product {
+    flex: 0 0 280px; /* Fixed width for consistent JS math */
+    height: 220px;
+    border-radius: 12px;
+    position: relative;
+    scroll-snap-align: center;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    
+    /* Background Image Fixes */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f0f0f0; /* Fallback color while image loads */
+    
+    color: white;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    user-select: none;
+    will-change: transform; /* Optimizes for mobile GPU performance */
+}
+
+/* --- TEXT OVERLAY --- */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    /* Darker gradient at bottom for text readability */
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.overlay h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- PRICE STYLING --- */
+.price {
+    font-size: 0.95rem;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.new-price { 
+    color: #fff; 
+    background-color: #e63946; /* Professional red */
+    padding: 2px 8px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+}
+
+.combo {
+    font-size: 0.8rem;
+    color: #ffd700; /* Gold for "Featured/Promoted" feel */
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- CALL TO ACTION BUTTON --- */
+.shop-btn {
+    background: #076e3b; /* Matches Ishaka Market Green */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    align-self: flex-start;
+    transition: background 0.3s ease;
+}
+
+.shop-btn:hover {
+    background: #05502a;
+}
+
+/* --- NAVIGATION DOTS --- */
+.dots { 
+    text-align: center; 
+    margin-top: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #ccc; 
+    border-radius: 50%;
+    cursor: pointer; 
+    transition: all 0.3s ease;
+}
+
+.dot.active { 
+    background: #076e3b; 
+    width: 24px; /* Pill shape for active dot */
+    border-radius: 10px;
+}
+
+.dot.near { 
+    background: #888; 
+    transform: scale(1.2); 
+}
+
+/* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 480px) {
+    .promoted-product {
+        flex: 0 0 85vw; /* Almost full width on small phones */
+        height: 200px;
+    }
+}

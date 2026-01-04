@@ -1,0 +1,300 @@
+/* --- GLOBAL STYLES --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    background-color: #c6c6c6;
+    overflow-x: hidden;
+}
+
+a, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+/* --- HEADER & NAVIGATION --- */
+header {
+    background-color: #076e3b;
+    position: fixed;
+    top: 0;
+    color: white;
+    padding: 15px 0;
+    display: grid;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+    grid-template-columns: 13% 55% 15% 15%;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.menu-img {
+    height: 20px;
+    width: 27px;
+    cursor: pointer;
+}
+
+.search-displayer {
+    height: 24px;
+    cursor: pointer;
+}
+
+/* --- MENU & SEARCH OVERLAYS --- */
+/* --- COMPACT SIDEBAR MENU --- */
+.menu {
+  display: none;
+      position: fixed;
+      top: 50px;
+      background-color: white;
+      color: black;
+      width: 40%;
+  z-index: 2000; /* Ensures it stays above product cards */
+  box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.3);
+  border-right: 2px solid #075211;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Smooth slide-in effect from the left */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Menu Header - Matches your Ishaka Market green theme */
+.menu-header {
+  color: #fff;
+  background-color: #075211;
+  display: grid;
+  grid-template-columns: 80% 20%;
+  align-items: center;
+  padding: 15px;
+}
+
+.menu-title {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: left;
+}
+
+.menu-x {
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+}
+
+/* Menu Body Links */
+.menu-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-body a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.menu-body li {
+  padding: 15px 20px;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+.menu-body li:active {
+  background-color: #e8f5e9; /* Light green highlight when clicked */
+  color: #075211;
+}
+
+/* --- SEARCH BAR (Small & Rounded) --- */
+.search {
+  display: none; /* Controlled by nav.js */
+  background-color: #075211;
+  position: fixed;
+  top: 10px;
+  left: 15%;
+  width: 70%;
+  z-index: 2001;
+  border-radius: 50px;
+  grid-template-columns: 15% 70% 15%;
+  align-items: center;
+  padding: 5px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.search-x, .search-submit {
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* --- OVERLAY (Optional) --- */
+/* If you want the rest of the page to dim when the menu is open */
+.menu-open-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1999;
+  display: none;
+}
+
+/* --- PRODUCT CONTAINERS --- */
+.container {
+    margin: 70px 10px 10px 10px; /* Top margin to clear fixed header */
+    border: 2px solid #076e3b;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.product {
+    margin: 10px 0;
+    border: 2px solid #076e3b;
+    border-radius: 10px;
+    background-color: #fff;
+    padding-bottom: 15px;
+    overflow: hidden;
+}
+
+.img {
+    max-width: 80%;
+    max-height: 250px;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: block;
+}
+
+h3 {
+    text-align: center;
+    margin: 10px 0 0 0;
+    color: #333;
+}
+
+.span {
+    padding: 10px;
+    display: block;
+    font-size: 18px;
+    color: black;
+}
+
+/* --- PRODUCT INFO & SELLER SECTIONS --- */
+.product-info-section {
+    padding: 10px 15px;
+    text-align: left;
+}
+
+.brand-tag {
+    color: #076e3b;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.description-text {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.4;
+}
+
+.seller-card {
+    background-color: #f9f9f9;
+    margin: 15px 10px;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #076e3b;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    margin: 0 0 10px 0;
+    color: #076e3b;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.seller-detail {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.delivery-status {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.delivery-status.available {
+    color: #076e3b;
+    background-color: #e8f5e9;
+}
+
+.delivery-status.unavailable {
+    color: #d32f2f;
+    background-color: #ffebee;
+}
+
+/* --- BUTTONS --- */
+.likebtn {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.cartbtn {
+    background-color: #076e3b;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: transform 0.2s;
+}
+
+.cartbtn:active {
+    transform: scale(0.95);
+}
+.product-detail-view .img {
+    aspect-ratio: 1 / 1; /* Pre-allocates space so text doesn't move */
+    background: #eee;
+    object-fit: cover;
+    display: block;
+}

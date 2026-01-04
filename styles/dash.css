@@ -1,0 +1,26 @@
+body {
+        margin: 0px;
+        padding: 0px;
+        font-family: 'Montserrat', sans-serif;
+        width: 99%;
+      }
+      header {
+        background-color: #076e3b;
+        position: fixed;
+        top: 0px;
+        color: white;
+        padding: 15px 0px;
+        display: grid;
+        width: 100%;
+        text-align: center;
+        padding-left: 2%;
+        grid-template-columns: 13% 70%;
+      }
+      .menu-img {
+        height: 20px;
+        width: 27px;
+      }
+      .title {
+        font-weight: bold;
+        font-size: 24px;
+      }
