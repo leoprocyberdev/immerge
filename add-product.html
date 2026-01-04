@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Add Product - Ishaka Market</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        .form-container { margin-top: 80px; padding: 20px; padding-bottom: 50px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #076e3b; }
+        input, select, textarea { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #076e3b; color: white; border: none; padding: 15px;
+            width: 100%; border-radius: 50px; font-weight: bold; font-size: 18px; cursor: pointer;
+            margin-top: 20px;
+        }
+        .image-preview {
+            width: 100%; height: 180px; border: 2px dashed #076e3b; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            margin-bottom: 10px; background-color: #f0fdf4;
+        }
+        .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .upload-label {
+            display: block; background: #333; color: white; padding: 12px;
+            border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold;
+        }
+        #upload-status { font-size: 13px; margin-top: 5px; text-align: center; font-weight: bold; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="dashboard.html"><img src="images/back.svg" class="menu-img" style="width:25px;"></a>
+        <span class="title">LIST NEW PRODUCT</span>
+        <span></span>
+    </header>
+
+    <section class="form-container">
+        <form id="add-product-form">
+            <div class="form-group">
+                <label>Product Photo</label>
+                <div class="image-preview" id="image-preview">
+                    <span style="color: #666;">Tap "Select Photo" below</span>
+                </div>
+                <input type="file" id="image-input" accept="image/*" hidden>
+                <label for="image-input" class="upload-label">📸 Select Photo</label>
+                <p id="upload-status"></p>
+                <input type="hidden" id="p-image-url">
+            </div>
+
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" id="p-name" placeholder="e.g. iPhone 13 Pro" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="p-category" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion & Clothing</option>
+                    <option value="home">Home & Furniture</option>
+                    <option value="food">Food & Groceries</option>
+                    <option value="beauty">Beauty & Health</option>
+                    <option value="services">Services</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Price (UGX)</label>
+                <input type="number" id="p-price" placeholder="50000" required>
+            </div>
+
+            <div class="form-group">
+                <label>Location (Where is the item?)</label>
+                <input type="text" id="p-location" placeholder="e.g. Ishaka Town, Bassajja, etc." required>
+            </div>
+
+            <div class="form-group">
+                <label>Brand (Optional)</label>
+                <input type="text" id="p-brand" placeholder="e.g. Apple / Samsung / Local">
+            </div>
+
+            <div class="form-group">
+                <label>Delivery Available?</label>
+                <select id="p-delivery">
+                    <option value="true">Yes, I can deliver</option>
+                    <option value="false">No, Buyer must pick up</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description / Details</label>
+                <textarea id="p-desc" rows="4" placeholder="Mention size, color, condition, or any defects..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">POST PRODUCT</button>
+        </form>
+    </section>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYPYVpVG2exZ7iUcUI_A8yg_984qJ68QY",
+            authDomain: "akatare-leo.firebaseapp.com",
+            projectId: "akatare-leo",
+            storageBucket: "akatare-leo.firebasestorage.app",
+            messagingSenderId: "979829794740",
+            appId: "1:979829794740:web:38c167f96106b88935f4e1"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUserProfile = null;
+        const IMGBB_API_KEY = "adb892389a0236cb4ca26b076fc30604";
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "login.html"; }
+            else {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) { 
+                    currentUserProfile = userDoc.data(); 
+                } else {
+                    alert("Please set up your profile first!");
+                    window.location.href = "login.html";
+                }
+            }
+        });
+
+        // IMAGE UPLOAD TO IMGBB
+        const imageInput = document.getElementById('image-input');
+        const uploadStatus = document.getElementById('upload-status');
+        const imageUrlInput = document.getElementById('p-image-url');
+        const previewDiv = document.getElementById('image-preview');
+        
+     imageInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    uploadStatus.innerText = "Compressing & Uploading... ⏳";
+    uploadStatus.style.color = "orange";
+
+    try {
+        // 1. COMPRESS THE IMAGE FIRST
+        const compressedFile = await compressImage(file, 800, 0.7); // Max width 800px, 70% quality
+
+        // 2. PREPARE FOR IMGBB
+        const formData = new FormData();
+        formData.append('image', compressedFile);
+
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await res.json();
+
+        if (result.success) {
+            imageUrlInput.value = result.data.url;
+            previewDiv.innerHTML = `<img src="${result.data.url}">`;
+            uploadStatus.innerText = "Optimized & Ready! ✅";
+            uploadStatus.style.color = "green";
+        } else { throw new Error(); }
+    } catch (err) {
+        uploadStatus.innerText = "Error. Try a smaller photo.";
+        uploadStatus.style.color = "red";
+    }
+});
+
+/**
+ * Helper function to shrink images locally
+ */
+async function compressImage(file, maxWidth, quality) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Resize logic
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert to Blob (compressed JPEG)
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/jpeg', quality);
+            };
+        };
+    });
+}
+
+        
+
+        // FORM SUBMIT
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!imageUrlInput.value) {
+                alert("Please select and upload an image first!");
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerText = "Uploading to Market...";
+
+            const productData = {
+                name: document.getElementById('p-name').value,
+                category: document.getElementById('p-category').value,
+                location: document.getElementById('p-location').value,
+                brand: document.getElementById('p-brand').value || "No Brand",
+                description: document.getElementById('p-desc').value,
+                price: {
+                    amount: Number(document.getElementById('p-price').value),
+                    currency: 'ugx'
+                },
+                // Seller info pulled from your Firebase Users collection
+                seller: {
+                    uid: auth.currentUser.uid,
+                    name: currentUserProfile.name,
+                    contact: currentUserProfile.contact,
+                },
+                delivery: document.getElementById('p-delivery').value === "true",
+                image: imageUrlInput.value,
+                status: "available",
+                promoted: false,
+                likes: 0,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "products"), productData);
+                alert("Success! Your product is now live.");
+                window.location.href = "index.html";
+            } catch (err) {
+                console.error(err);
+                alert("Failed to post. Check connection.");
+                btn.disabled = false;
+                btn.innerText = "POST PRODUCT";
+            }
+        });
+    </script>
+</body>
+</html>

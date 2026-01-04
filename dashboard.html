@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Seller Dashboard - Ishaka Market</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 10px 10px; }
+        .stat-card { background: #076e3b; color: white; padding: 15px; border-radius: 10px; text-align: center; }
+        .manage-header { margin: 20px 10px 10px; font-weight: bold; color: #076e3b; }
+        .dash-product { display: flex; align-items: center; background: white; margin: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .dash-img { width: 60px; height: 60px; border-radius: 5px; margin-right: 15px; }
+        .dash-info { flex: 1; }
+        .dash-btns { display: flex; gap: 5px; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="images/back.svg" class="menu-img"></a>
+        <span class="title">MY DASHBOARD</span>
+        <span></span><span></span>
+    </header>
+    <h2 id="welcome-user" style="margin: 70px 10px 10px; color: #076e3b;"></h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h2 id="total-products">0</h2>
+            <p>Active Products</p>
+        </div>
+        <div class="stat-card">
+            <h2 id="total-likes">0</h2>
+            <p>Total Likes</p>
+        </div>
+    </div>
+
+    <p class="manage-header">Manage My Products</p>
+    <div id="my-products-list">
+        </div>
+
+<p class="manage-header">Recent Customer Inquiries</p>
+<div id="recent-chats-list">
+    </div>
+
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>
