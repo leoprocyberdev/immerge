@@ -32,7 +32,7 @@
 </head>
 <body>
     <header>
-        <a href="dashboard.html"><img src="images/back.svg" class="menu-img" style="width:25px;"></a>
+        <a href="dashboard"><img src="images/back.svg" class="menu-img" style="width:25px;"></a>
         <span class="title">LIST NEW PRODUCT</span>
         <span></span>
     </header>
@@ -252,7 +252,7 @@ async function compressImage(file, maxWidth, quality) {
             try {
                 await addDoc(collection(db, "products"), productData);
                 alert("Success! Your product is now live.");
-                window.location.href = "index.html";
+                window.location.href = "market.zamdav.xyz";
             } catch (err) {
                 console.error(err);
                 alert("Failed to post. Check connection.");
