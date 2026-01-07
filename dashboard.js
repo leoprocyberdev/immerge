@@ -27,7 +27,7 @@ const chatsContainer = document.getElementById('recent-chats-list');
 // --- 1. AUTH & PROFILE LOAD ---
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "login";
     } else {
         // Fetch User Profile for Name
         const userDoc = await getDoc(doc(db, "users", user.uid));
