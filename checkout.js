@@ -207,7 +207,7 @@ function attachEvents(product, user, sellerName, sellerContact) {
             localStorage.setItem('chatWithContact', sellerContact);
             const roomId = [user.uid, product.seller.uid].sort().join('_');
             localStorage.setItem('currentRoomId', roomId);
-            window.location.href = "inbox.html";
+            window.location.href = "inbox";
         };
     }
 }
