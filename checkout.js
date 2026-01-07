@@ -43,7 +43,7 @@ document.body.appendChild(viewer);
 // --- 2. AUTH & INITIALIZATION ---
 onAuthStateChanged(auth, (user) => {
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "login";
     } else {
         initPage(user);
     }
