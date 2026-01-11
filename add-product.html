@@ -252,7 +252,7 @@ async function compressImage(file, maxWidth, quality) {
             try {
                 await addDoc(collection(db, "products"), productData);
                 alert("Success! Your product is now live.");
-                window.location.href = "market.zamdav.xyz";
+                window.location.href = "./";
             } catch (err) {
                 console.error(err);
                 alert("Failed to post. Check connection.");
