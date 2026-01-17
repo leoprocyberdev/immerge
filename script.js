@@ -75,13 +75,12 @@ function renderProductElement(doc) {
     productDiv.style.animation = "fadeIn 0.5s ease forwards";
 
     productDiv.innerHTML = `
-        <center><img class="img" src="${imageSrc}" loading="lazy" onerror="this.src='images/img.jpg'"></center>
-        <hr><span class="span"><b>${product.name}</b></span><hr>
-        <span class="price">💲 ${fmtCurrency(product.price.amount)} ${product.price.currency.toUpperCase()}</span><hr>
-        <div class="price-button-area">
-           <span class="price">⭐ ${product.ratings || 0}</span>
-           <button class="cartbtn button viewdetails">View Details</button>
-        </div>
+     <div class="item-card">
+       <center><img src="${imageSrc}" loading="lazy" onerror="this.src='images/img.jpg'"></center>
+       <h5>${product.name}</h5>
+       <h4>UGX ${fmtCurrency(product.price.amount)} =</h4>
+       <center><button>Shop now</button></center>
+     </div>
     `;
 
     // THE SPEED FIX: Save to cache on click for instant checkout load
