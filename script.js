@@ -87,7 +87,7 @@ function renderProductElement(doc) {
     productDiv.onclick = () => {
         localStorage.setItem('clickedid', productId);
         localStorage.setItem(`cache_${productId}`, JSON.stringify({ ...product, id: productId }));
-        window.location.href = 'checkout.html';
+        window.location.href = 'checkout';
     };
 
     htmlContainer.appendChild(productDiv);
