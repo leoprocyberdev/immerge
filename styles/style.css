@@ -230,15 +230,6 @@
   .menu-body li:hover {
     background-color: #ea8f5b;
   }
-  .viewdetails {
-      //margin: 30px 10px;
-     // position: absolute;
-     // margin-bottom: 50px;
-      //right: 5px;
-     //float: right;
-      background-color: green; font-size: 15px; padding: 8px 15px; border-radius: 50px; border: none; outline: none; font-weight: bold; color: #fff;
-  }
-  
   .price-button-area {
     display: grid;
     grid-template-columns: 40% 55% 5%;
@@ -372,3 +363,42 @@ button:hover {
     border-radius: 50%;
     font-weight: bold;
 }
+@media screen and (min-width: 600px) {
+      .item-card {
+        padding: 4%;
+        border-radius: 8px;
+        margin: 16px 0px 16px 0px;
+        box-shadow: 10px 15px 100px #000;
+      }
+      .item-card img {
+        max-width: 90%;
+        height: 250px;
+        border-radius: 10px;
+      }
+      .item-card h5 {
+        font-size: 25px;
+        margin: 0px;
+        padding: 5px;
+      }
+      .item-card h4 {
+        margin: 0px;
+        font-size: 28px;
+        padding: 5px;
+        color: #fff;
+      }
+      .item-card button {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: #de5007;
+        font-size: 20px;
+        color: #fff;
+        padding: 10px;
+        border-radius: 50px;
+      }
+      .items-container {
+        display: grid;
+        grid-template-columns: 24% 24% 24% 24%;
+        padding: 8px 2%;
+        column-gap: 2%;
+      }
