@@ -69,8 +69,7 @@ onSnapshot(q, (snapshot) => {
 });
 
 window.goToProduct = (id) => {
-    localStorage.setItem('clickedid', id);
-    window.location.href = "checkout.html";
+    window.location.href = `checkout.html?id=${id}`;
 };
 
 // 2. THE NO-SHAKE SCROLL FUNCTION// Replace your scrollToIndex function with this exact version:// Replace your scrollToIndex function with this exact version:

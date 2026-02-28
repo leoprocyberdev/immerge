@@ -8,7 +8,7 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
         background-size: cover;
-      }
+    .  }
       
       .item-card {
         background: #097924;
@@ -124,6 +124,7 @@
       text-align: center;
       margin: 5px;
       cursor: pointer;
+      z-index: 100;
 }
 
 .search-input {

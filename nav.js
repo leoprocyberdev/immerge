@@ -15,6 +15,7 @@ const menuButton = document.querySelector('.menu-button');
       });
       const searchRemover = document.querySelector('.search-x');
       searchRemover.addEventListener('click', () => {
+        alert('I wotk')
         searchElement.style.display = 'none';
       });
       //Cartegory navigation

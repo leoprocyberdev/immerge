@@ -83,8 +83,7 @@ window.goToProduct = (productId) => {
         alert("Product details lost. Please find it in the market again.");
         return;
     }
-    localStorage.setItem('clickedid', productId);
-    window.location.href = 'checkout.html';
+    window.location.href = `checkout.html?id=${productId}`;
 };
 
 /**

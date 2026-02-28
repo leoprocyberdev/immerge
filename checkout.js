@@ -162,7 +162,7 @@ function attachEvents(product, user, sellerName, sellerContact) {
         shareBtn.onclick = async () => {
             const shareData = {
                 title: product.name,
-                text: `Check out this ${product.name} on Ishaka Market! Price: ${product.price.amount} ${product.price.currency}`,
+                text: `Check out this ${product.name} on Akatare Ug online Market! Price: ${product.price.amount} ${product.price.currency}`,
                 url: window.location.href 
             };
             try {
