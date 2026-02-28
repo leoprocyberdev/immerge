@@ -17,7 +17,14 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 const container = document.querySelector('.container');
-const myId = localStorage.getItem('clickedid');
+const urlParams = new URLSearchParams(window.location.search);
+const myId = urlParams.get('id');
+
+if (!myId) {
+    // Redirect back to home if someone visits checkout.html without an ID
+    window.location.href = "./";
+}
+
 
 // --- 1. UI STYLING ---
 const style = document.createElement('style');

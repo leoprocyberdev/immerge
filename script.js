@@ -85,9 +85,8 @@ function renderProductElement(doc) {
 
     // THE SPEED FIX: Save to cache on click for instant checkout load
     productDiv.onclick = () => {
-        localStorage.setItem('clickedid', productId);
         localStorage.setItem(`cache_${productId}`, JSON.stringify({ ...product, id: productId }));
-        window.location.href = 'checkout';
+        window.location.href = `checkout.html?id=${doc.id}`;
     };
 
     htmlContainer.appendChild(productDiv);
