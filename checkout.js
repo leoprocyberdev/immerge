@@ -77,7 +77,19 @@ async function initPage(currentUser) {
         if (docSnap.exists()) {
             const freshProduct = docSnap.data();
             localStorage.setItem(`cache_${myId}`, JSON.stringify(freshProduct));
-            renderHTML(freshProduct, currentUser); 
+            renderHTML(freshProduct, currentUser); //updating the page title
+            if (snap.exists()) {
+    const product = snap.data();
+    
+    // Update the browser tab title
+    document.title = `${product.name} | Akatare Market`;
+    
+    // Attempt to update meta tags (works for some smart browsers/search engines)
+    document.querySelector('meta[property="og:title"]').setAttribute("content", product.name);
+    document.querySelector('meta[property="og:image"]').setAttribute("content", product.image);
+}
+
+            
         }
     } catch (e) { console.error("Firebase update failed", e); }
 }

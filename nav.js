@@ -13,11 +13,13 @@ const menuButton = document.querySelector('.menu-button');
       searchBringer.addEventListener('click', () => {
         searchElement.style.display = 'grid';
       });
-      const searchRemover = document.querySelector('.search-x');
+      //Removing the search logic from nav.js
+     /* const searchRemover = document.querySelector('.search-x');
       searchRemover.addEventListener('click', () => {
         alert('I wotk')
         searchElement.style.display = 'none';
       });
+      */
       //Cartegory navigation
       const cartegoryButton = document.querySelector('.category');
       const cartegoryElement = document.querySelector('.cartegory-elm');
