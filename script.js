@@ -1,3 +1,27 @@
+// --- AKATARE SERVER SYNC ---
+const SERVER_URL = "https://leopro256-nodeserver.hf.space";
+
+async function syncMarketInfo() {
+    try {
+        const response = await fetch(`${SERVER_URL}/market-info`);
+        const config = await response.json();
+
+        // 1. Update the Brand Title in the Header
+        const titleElement = document.querySelector('.title');
+        if (titleElement) titleElement.innerText = config.marketName;
+
+        // 2. Update the Page Title (the browser tab)
+        document.title = config.marketName + " | Buy & Sell";
+
+        console.log("✅ Sync complete with Akatare Server:", config.version);
+    } catch (error) {
+        console.error("❌ Server sync failed. Using offline defaults.", error);
+    }
+}
+
+// Run the sync immediately
+syncMarketInfo();
+
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getFirestore, collection, query, orderBy, limit, startAfter, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { fmtCurrency } from './utils/formatCurrency.js';
@@ -47,9 +71,10 @@ async function fetchProducts(isLoadMore = false) {
 
         const querySnapshot = await getDocs(q);
         if (!isLoadMore) htmlContainer.innerHTML = '';
+        const offlineContainer = document.querySelector(".offline-elm");
 
         if (querySnapshot.empty) {
-            if (!isLoadMore) htmlContainer.innerHTML = "<center><h3>No products found.</h3></center>";
+            if (!isLoadMore) offlineContainer.innerHTML = "<center><center><img src=\"images/offline.svg\"</center><h3>Network problem.</h3></center>";
             if (loadMoreBtn) loadMoreBtn.style.display = "none";
             return;
         }

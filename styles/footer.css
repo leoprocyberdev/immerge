@@ -1,0 +1,37 @@
+.foot-nav {
+  width; 100%;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 60px;
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  background-color: #075211;
+  color: gold;
+  margin: opx;
+  padding: 0px;
+}
+.foot-nav div {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 50% 50%;
+  position: relative;
+  margin: opx;
+  padding: 0px;
+}
+.foot-nav div .img {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+.foot-nav div h5 {
+  font-family: Sans-Serif;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+}

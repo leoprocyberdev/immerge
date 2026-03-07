@@ -33,7 +33,7 @@
 <body>
     <header>
         <a href="dashboard"><img src="images/back.svg" class="menu-img" style="width:25px;"></a>
-        <span class="title">LIST NEW PRODUCT</span>
+        <span class="title"> ... </span>
         <span></span>
     </header>
 
@@ -226,30 +226,54 @@ async function compressImage(file, maxWidth, quality) {
             btn.innerText = "Uploading to Market...";
 
             const productData = {
-                name: document.getElementById('p-name').value,
-                category: document.getElementById('p-category').value,
-                location: document.getElementById('p-location').value,
-                brand: document.getElementById('p-brand').value || "No Brand",
-                description: document.getElementById('p-desc').value,
-                price: {
-                    amount: Number(document.getElementById('p-price').value),
-                    currency: 'ugx'
-                },
-                // Seller info pulled from your Firebase Users collection
-                seller: {
-                    uid: auth.currentUser.uid,
-                    name: currentUserProfile.name,
-                    contact: currentUserProfile.contact,
-                },
-                delivery: document.getElementById('p-delivery').value === "true",
-                image: imageUrlInput.value,
-                status: "available",
-                promoted: false,
-                likes: 0,
-                createdAt: serverTimestamp()
-            };
+    name: document.getElementById('p-name').value,
+    category: document.getElementById('p-category').value,
+    location: document.getElementById('p-location').value,
+    brand: document.getElementById('p-brand').value || "No Brand",
+    description: document.getElementById('p-desc').value,
+    price: {
+        amount: Number(document.getElementById('p-price').value),
+        currency: 'ugx'
+    },
+    // Seller info from Firebase Users collection
+    seller: {
+        uid: auth.currentUser.uid,
+        name: currentUserProfile.name,
+        contact: currentUserProfile.contact,
+    },
+    delivery: document.getElementById('p-delivery').value === "true",
+    image: imageUrlInput.value,
+    
+    // --- Business Identity Fields ---
+    businessSlug: localStorage.getItem('userBusinessSlug'), 
+    vendorName: localStorage.getItem('userBusinessName'),
+    ownerId: localStorage.getItem('userId'), // Added missing comma here
+    
+    status: "available",
+    promoted: false,
+    likes: 0,
+    createdAt: serverTimestamp()
+};
+
 
             try {
+              // First, ask the server if this product is okay
+                const response = await fetch("https://leopro256-nodeserver.hf.space/secure-post", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(productData)
+                });
+
+                const validation = await response.json();
+
+                if (!validation.success) {
+                    alert("Akatare Server Rejected: " + validation.message);
+                    btn.disabled = false;
+                    btn.innerText = "POST PRODUCT";
+                    return;
+                }
+
+                // If the server says YES, then we save to Firebase
                 await addDoc(collection(db, "products"), productData);
                 alert("Success! Your product is now live.");
                 window.location.href = "./";
@@ -261,5 +285,17 @@ async function compressImage(file, maxWidth, quality) {
             }
         });
     </script>
+    <script>
+    // Fetch the brand name from your server so it doesn't say "Ishaka" anymore
+    fetch("https://leopro256-nodeserver.hf.space/market-info")
+        .then(res => res.json())
+        .then(config => {
+            document.title = "Add Product - " + config.marketName;
+            // If you have a header title, update it here too
+            const headerTitle = document.querySelector('.title');
+            if (headerTitle) headerTitle.innerText = "UPLOAD - " + config.marketName.toUpperCase();
+        });
+</script>
+
 </body>
 </html>

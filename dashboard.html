@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Seller Dashboard - Ishaka Market</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/footer.css">
+    
     <style>
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 10px 10px; }
         .stat-card { background: #076e3b; color: white; padding: 15px; border-radius: 10px; text-align: center; }
@@ -38,11 +40,72 @@
     <div id="my-products-list">
         </div>
 
+
+<!-- Your business -->
+<div id="active-shop-card" style="display:none; padding: 20px; background: #e8f5e9; border: 2px solid #076e3b; border-radius: 10px; margin: 20px 0;">
+    <h3 style="color: #076e3b; margin-top: 0;">🏪 Your Shop is Live!</h3>
+    <p><strong>Shop Name:</strong> <span id="display-biz-name"></span></p>
+    <p><strong>Your Public Link:</strong></p>
+    <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #ccc; word-break: break-all;">
+        <a id="shop-link-url" href="#" target="_blank" style="color: #076e3b; text-decoration: none; font-weight: bold;"></a>
+    </div>
+    <button onclick="shareMyShop()" style="margin-top: 15px; background: #25D366; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">
+        Share on WhatsApp
+    </button>
+</div>
+
+<!-- Register a business -->
+<div id="business-setup" style="padding: 20px; background: #f9f9f9; border-radius: 10px; margin: 20px;">
+  
+    <h3>Create Your Akatare Shop</h3>
+    <p>Choose a name for your unique shop URL.</p>
+    <input type="text" id="biz-name-input" placeholder="e.g. Musa Electronics" style="width:100%; padding:10px; margin-bottom:10px;">
+    <button onclick="claimBusiness()" style="background: #076e3b; color: white; border: none; padding: 10px 20px; border-radius: 5px;">
+        Claim My Unique URL
+    </button>
+</div>
+
+
 <p class="manage-header">Recent Customer Inquiries</p>
 <div id="recent-chats-list">
     </div>
 
+<!-- The footer starts from here -->
+    <section class="foot-nav">
+      <div id="navigate">
+        <section class="img">
+          <img src="images/home.svg">
+        </section>
+        <h5>Home</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/categories.svg">
+        </section>
+        <h5>Categories</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/cart.svg">
+        </section>
+        <h5>Cart</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/wishlist.svg">
+          <span id="cart-count">0</span></span>
+        </section>
+        <h5>Wishlist</h5>
+      </div>
+      <div id="navigate">
+       <section class="img">
+          <img src="images/account.svg">
+        </section>
+        <h5>Account</h5>
+      </div>
+    </section>
 
+    <script src="foot-nav.js"></script>
     <script type="module" src="dashboard.js"></script>
 </body>
 </html>

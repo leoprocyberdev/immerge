@@ -13,17 +13,14 @@
   <body>
     
     <section class="space"></section>
-    
-    <section class="carousel-container promotions-section" id="carousel">
-    </section>
-    
-    <section class="offline-elm"></section>
-    
-    <div class="dots" id="dots"></div>
-    
+
+<div id="product-list" class="items-container">
+    </div>
+
+<!--
     <section class="container items-container">
     </section>
-    
+    -->
 <center>
     <button id="load-more-btn" class="cartbtn" style="display:none; margin: 20px 0; background-color: green; font-size: 15px; padding: 10px 20px; border-radius: 50px; border: none; outline: none; font-weight: bold; color: #fff;">
         Load More Products
@@ -75,13 +72,12 @@
     </section>
     
     <header>
-      <img src="images/menu.svg" class="menu-img menu-button">
+      <img src="images/menu.png" class="menu-img menu-button">
       <span class="title"> ... </span> 
       <a href="cart"><span class="floating-cart" style="
-      display: none;
       text-shadow: 2px 2px 5px #000;
       font-size: 25px;
-      ">🛒</span></a>
+      ">🛒<span id="cart-count">0</span></span></a>
       <img src="images/search.svg" class="search-displayer">
     </header>
     
@@ -111,8 +107,8 @@
 </section>
 
     <div id="recent-searches" class="recent-box"></div>
-    
-<!-- The footer starts from here -->
+
+
     <section class="foot-nav">
       <div id="navigate">
         <section class="img">
@@ -147,15 +143,14 @@
       </div>
     </section>
 
-<section class="space"></section>
-    
-
-    <script type="module" src="script.js"></script>
-    <script type="module" src="promotions.js"></script>
-    <script src="nav.js"></script>
     <script src="foot-nav.js"></script>
+
+    <script type="module" src="shop.js"></script>
+    
+    
+    <script src="nav.js"></script>
     <script>
- 
+      
     </script>
   </body>
 </html>

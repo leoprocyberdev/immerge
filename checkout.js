@@ -135,7 +135,7 @@ function renderHTML(product, currentUser) {
                 ${isSold ? `
                     <button class="cartbtn" disabled style="background-color: #ccc; width:90%;">Product Sold Out</button>
                 ` : `
-                    <button class="cartbtn" id="add-to-cart" style="background-color: #f39c12; width:90%; margin-bottom: 12px;">🛒 Save to Cart</button>
+                    <button class="cartbtn" id="add-to-cart" style="background-color: #f39c12; width:90%; margin-bottom: 12px;"><img src="images/wishlist.svg" width="12px">Add to wishlist</button>
                     <button class="cartbtn" id="share-btn" style="background-color: #3498db; width:90%; margin-bottom: 12px;">🔗 Share Product</button>
                     <button class="cartbtn" id="message-seller-btn" style="background-color: #076e3b; width:90%; margin-bottom: 12px;">Message Seller</button>
                     <a href="https://wa.me/${sellerContact.replace(/\+/g, '')}?text=Hello ${sellerName}, I am interested in ${product.name}." target="_blank" style="text-decoration:none;">

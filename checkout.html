@@ -3,6 +3,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Product Checkout </title>
+    
+    <link rel="stylesheet" href="styles/footer.css">
     <link rel="stylesheet" href="styles/check.css">
     <style>
   
@@ -11,9 +13,9 @@
   <body>
     
     <header>
-      <img src="images/menu.png" class="menu-img menu-button">
+      <img src="images/menu.svg" class="menu-img menu-button">
       <span class="title">AKATARE</span> 
-      <a href="cart"> <span style="
+      <a href="cart"> <span style="display: none;
       text-shadow: 2px 2px 5px #000;
       font-size: 25px;
       ">🛒</span> </a>
@@ -47,6 +49,42 @@
     
     <section style="margin-top: 60px;" class="container">
     </section>
+    
+        <section class="foot-nav">
+      <div id="navigate">
+        <section class="img1">
+          <img src="images/home.svg">
+        </section>
+        <h5>Home</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/categories.svg">
+        </section>
+        <h5>Categories</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/cart.svg">
+        </section>
+        <h5>Cart</h5>
+      </div>
+      <div id="navigate">
+        <section class="img">
+          <img src="images/wishlist.svg">
+        </section>
+        <h5>Wishlist</h5>
+      </div>
+      <div id="navigate">
+       <section class="img">
+          <img src="images/account.svg">
+        </section>
+        <h5>Account</h5>
+      </div>
+    </section>
+
+    <script src="foot-nav.js"></script>
+    
     <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";

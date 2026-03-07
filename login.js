@@ -36,15 +36,17 @@ document.getElementById('auth-form').onsubmit = async (e) => {
     const password = document.getElementById('password').value;
 
     try {
+        let userCredential;
+
         if (isLogin) {
             // Standard Login
-            await signInWithEmailAndPassword(auth, email, password);
+            userCredential = await signInWithEmailAndPassword(auth, email, password);
         } else {
-            // 1. Create the account in Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            // 1. Create the account
+            userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 2. Save Name and Contact to Firestore 'users' collection
+            // 2. Save Profile to Firestore
             const name = document.getElementById('user-name').value;
             const contact = document.getElementById('user-contact').value;
 
@@ -54,12 +56,20 @@ document.getElementById('auth-form').onsubmit = async (e) => {
                 email: email,
                 createdAt: new Date()
             });
-
-            // Save to localStorage for quick access in other scripts
+            
             localStorage.setItem('chatWithName', name);
             localStorage.setItem('chatWithContact', contact);
         }
+
+        // --- THE FIX: Save ID for BOTH Login and Signup ---
+        const user = userCredential.user;
+        if (user) {
+            localStorage.setItem('userId', user.uid);
+            console.log("User ID locked in:", user.uid);
+        }
+
         window.location.href = "index.html";
+        
     } catch (error) {
         alert("Error: " + error.message);
     }

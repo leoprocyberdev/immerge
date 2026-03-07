@@ -185,3 +185,97 @@ function loadUserChats(uid) {
         }
     });
 }
+
+//Register business
+window.claimBusiness = async function claimBusiness() {
+    const name = document.getElementById('biz-name-input').value;
+    const userId = localStorage.getItem('userId'); // Ensure you save UID during login
+
+    if (!name) return alert("Please enter a name");
+
+    const response = await fetch("https://leopro256-nodeserver.hf.space/register-business", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ businessName: name, userId: userId })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        alert("Success! Your shop is live at: " + result.shareUrl);
+        // Save the slug locally so we can use it when they post products
+        localStorage.setItem('userBusinessSlug', result.slug);
+        location.reload(); 
+    } else {
+        alert("Error: " + result.message);
+    }
+}
+
+//the business link
+
+window.displayBusinessLink = function() {
+    const slug = localStorage.getItem('userBusinessSlug');
+    const bizName = localStorage.getItem('userBusinessName');
+    const setupSection = document.getElementById('business-setup');
+    const activeCard = document.getElementById('active-shop-card');
+
+    if (slug && slug !== "undefined") {
+        // Hide the "Claim" form and show the "Active" card
+        if(setupSection) setupSection.style.display = 'none';
+        activeCard.style.display = 'block';
+
+        const fullUrl = `${location.origin}/shop?vendor=${slug}`;
+        
+        document.getElementById('display-biz-name').innerText = bizName;
+        document.getElementById('shop-link-url').innerText = fullUrl;
+        document.getElementById('shop-link-url').href = fullUrl;
+    }
+};
+
+// Run this when the page opens
+window.addEventListener('load', displayBusinessLink);
+
+
+// Function to check and show the business link permanently
+async function loadPermanentBusinessLink() {
+    const userId = localStorage.getItem('userId');
+    const setupSection = document.getElementById('business-setup');
+    const activeCard = document.getElementById('active-shop-card');
+
+    if (!userId) return; // Not logged in
+
+    // 1. Check if we already have the slug in LocalStorage
+    let slug = localStorage.getItem('userBusinessSlug');
+    let bizName = localStorage.getItem('userBusinessName');
+
+    // 2. If it's missing from LocalStorage, fetch it from Firestore (The safety net)
+    if (!slug) {
+        try {
+            const userDoc = await getDoc(doc(db, "users", userId));
+            if (userDoc.exists() && userDoc.data().businessSlug) {
+                slug = userDoc.data().businessSlug;
+                bizName = userDoc.data().businessName;
+                // Save it back to LocalStorage so it's faster next time
+                localStorage.setItem('userBusinessSlug', slug);
+                localStorage.setItem('userBusinessName', bizName);
+            }
+        } catch (err) {
+            console.error("Error fetching business info:", err);
+        }
+    }
+
+    // 3. If a slug exists, show the "Live" card and hide the "Claim" form
+    if (slug) {
+        if(setupSection) setupSection.style.display = 'none';
+        if(activeCard) {
+            activeCard.style.display = 'block';
+            const fullUrl = `${location.origin}/shop?vendor=${slug}`;
+            document.getElementById('display-biz-name').innerText = bizName;
+            document.getElementById('shop-link-url').innerText = fullUrl;
+            document.getElementById('shop-link-url').href = fullUrl;
+        }
+    }
+}
+
+// Trigger this as soon as the page finishes loading
+window.addEventListener('DOMContentLoaded', loadPermanentBusinessLink);
