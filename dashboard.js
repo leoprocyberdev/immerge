@@ -27,20 +27,29 @@ const chatsContainer = document.getElementById('recent-chats-list');
 // --- 1. AUTH & PROFILE LOAD ---
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        window.location.href = "login";
+        window.location.href = "login.html";
     } else {
-        // Fetch User Profile for Name
+        localStorage.setItem('userId', user.uid); // Ensure ID is always set
+        
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if(welcomeText) welcomeText.innerText = `Welcome, ${userData.name}`;
             
-            // Start listeners for this specific user
+            // --- SYNC BUSINESS DATA ---
+            if (userData.businessSlug) {
+                localStorage.setItem('userBusinessSlug', userData.businessSlug);
+                localStorage.setItem('userBusinessName', userData.businessName);
+                displayBusinessLink(); // Show the link immediately
+            }
+
             loadUserProducts(user.uid);
             loadUserChats(user.uid);
         }
     }
 });
+
+
 
 // --- 2. MANAGE PRODUCTS ---
 function loadUserProducts(uid) {
