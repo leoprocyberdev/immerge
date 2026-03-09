@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akatare Admin Panel</title>
+    <style>
+        :root { --green: #075211; --gold: #FFD700; --dark: #111b21; --bg: #0b141a; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; }
+        
+        header { background: var(--green); padding: 20px; text-align: center; border-bottom: 3px solid var(--gold); }
+        .container { padding: 20px; max-width: 800px; margin: auto; }
+
+        /* Stats Cards */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .card { background: var(--dark); padding: 20px; border-radius: 12px; border: 1px solid #222d34; text-align: center; }
+        .card h3 { margin: 0; color: var(--gold); font-size: 24px; }
+        .card p { margin: 5px 0 0; color: #8696a0; font-size: 14px; }
+
+        /* Broadcast Section */
+        .broadcast-box { background: var(--dark); padding: 25px; border-radius: 15px; border-left: 5px solid var(--gold); }
+        textarea { width: 100%; height: 120px; background: #202c33; border: 1px solid #2f3b44; border-radius: 10px; color: white; padding: 15px; box-sizing: border-box; font-size: 16px; margin-top: 10px; resize: none; }
+        textarea:focus { outline: 1px solid var(--gold); }
+        
+        .btn-send { width: 100%; background: var(--green); color: gold; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 16px; margin-top: 15px; cursor: pointer; transition: 0.3s; }
+        .btn-send:active { transform: scale(0.98); background: #0a6b16; }
+
+        .status-msg { margin-top: 10px; text-align: center; font-size: 13px; color: var(--gold); display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="margin:0; color: var(--gold);">Akatare Control Center</h1>
+        <p style="margin:5px 0 0; font-size:12px; opacity:0.8;">Akatare online Market Management Portal</p>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="card">
+                <h3 id="total-users">--</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="card">
+                <h3 id="total-products">--</h3>
+                <p>Live Products</p>
+            </div>
+        </div>
+
+        <div class="broadcast-box">
+            <h2 style="margin:0; font-size: 18px;">📢 Send Official Broadcast</h2>
+            <p style="font-size: 13px; color: #8696a0; margin: 5px 0;">This message will appear in every user's "Akatare Official" inbox.</p>
+            
+            <textarea id="broadcast-input" placeholder="Enter important update or announcement..."></textarea>
+            
+            <button class="btn-send" id="broadcast-btn">Post Announcement</button>
+            <div id="status-text" class="status-msg">Sending to all users...</div>
+        </div>
+        <div class="broadcast-box" style="margin-top:20px; border-left: 5px solid #ff4b4b;">
+    <h2 style="margin:0; font-size: 18px; color: #ff4b4b;">⚠️ Danger Zone</h2>
+    <p style="font-size: 13px; color: #8696a0; margin: 5px 0;">Use these to clear test data before the official launch.</p>
+    
+    <button class="btn-send" id="clear-official-btn" style="background: #440000; color: #ff4b4b; border: 1px solid #ff4b4b;">
+        Wipe Official Chat History
+    </button>
+    <div id="cleanup-status" class="status-msg">Deleting messages...</div>
+</div>
+
+    </div>
+    
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

@@ -18,3 +18,9 @@ const app = initializeApp(firebaseConfig);
 // Export for other files (shop.js, login.js, etc.)
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+import { enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+enableIndexedDbPersistence(db).catch((err) => {
+    console.error("Persistence failed", err.code);
+});

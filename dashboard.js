@@ -1,6 +1,8 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 import { getFirestore, collection, query, where, onSnapshot, doc, deleteDoc, updateDoc, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { formatName } from './utils/formatName.js';
+
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -34,7 +36,8 @@ onAuthStateChanged(auth, async (user) => {
         const userDoc = await getDoc(doc(db, "users", user.uid));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            if(welcomeText) welcomeText.innerText = `Welcome, ${userData.name}`;
+            const cleanName = formatName(userData.name)
+            if(welcomeText) welcomeText.innerText = `Welcome, ${cleanName}`;
             
             // --- SYNC BUSINESS DATA ---
             if (userData.businessSlug) {
@@ -182,7 +185,7 @@ function loadUserChats(uid) {
 
                 chatItem.onclick = () => {
                     localStorage.setItem('currentRoomId', msg.roomId); 
-                    window.location.href = `inbox.html`;
+                    window.location.href = `chat-view.html`;
                 };
 
                 chatsContainer.appendChild(chatItem);

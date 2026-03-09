@@ -1,126 +1,92 @@
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { db, auth } from './db-init.js';
+import { collection, query, onSnapshot, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-// 1. Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCYPYVpVG2exZ7iUcUI_A8yg_984qJ68QY",
-  authDomain: "akatare-leo.firebaseapp.com",
-  projectId: "akatare-leo",
-  storageBucket: "akatare-leo.firebasestorage.app",
-  messagingSenderId: "979829794740",
-  appId: "1:979829794740:web:38c167f96106b88935f4e1"
-};
+// Helper to format names: "johns stores" -> "Johns Stores"
+function initName(name) {
+    if (!name) return "Akatare Business";
+    return name.toLowerCase().split(' ').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+}
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-// DOM Elements
-const messageInput = document.querySelector('.foot input');
-const sendBtn = document.querySelector('.foot button');
-const chatContainer = document.querySelector('.content');
-const pageTitle = document.querySelector('.title');
-
-let currentUserProfile = null;
-let activeRoomId = localStorage.getItem('currentRoomId');
-
-// 2. Auth Protection & Profile Fetch
-onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        window.location.href = "login.html";
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        loadConversations(user.uid);
     } else {
-        // Get the logged-in user's name for the "senderName" field
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        currentUserProfile = userDoc.exists() ? userDoc.data() : { name: "Buyer" };
-        
-        console.log("Chatting as:", currentUserProfile.name);
-        setupChat(user);
+        window.location.href = "login.html";
     }
 });
 
-function setupChat(user) {
-    const sellerName = localStorage.getItem('chatWithName') || "Seller";
-    const interestedProduct = localStorage.getItem('interestedProduct');
+async function loadConversations(myUid) {
+    const list = document.getElementById('dynamic-business-list');
     
-    pageTitle.innerText = `Chat: ${sellerName}`;
-
-    // Auto-fill interest message if first time opening from checkout
-    if (interestedProduct) {
-        messageInput.value = `Hi ${sellerName}, I'm interested in "${interestedProduct}". Is it still available?`;
-        localStorage.removeItem('interestedProduct');
+    // 1. INSTANT LOAD: Check if we have a saved version on the phone
+    const cachedChats = localStorage.getItem(`cache_inbox_${myUid}`);
+    if (cachedChats) {
+        list.innerHTML = cachedChats; // Shows the old list immediately
     }
 
-    // Load Messages
-    loadMessages(user.uid);
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
 
-    // Send Button Click
-    sendBtn.onclick = () => sendMessage(user.uid);
-    
-    // Enter Key Support
-    messageInput.onkeypress = (e) => {
-        if (e.key === 'Enter') sendMessage(user.uid);
-    };
-}
+    onSnapshot(q, async (snapshot) => {
+        let newListHtml = "";
+        const processedRooms = new Set();
 
-// 3. Send Message Function
-async function sendMessage(myUid) {
-    const text = messageInput.value.trim();
-    if (text !== "" && activeRoomId) {
-        try {
-            await addDoc(collection(db, "messages"), {
-                roomId: activeRoomId,
-                text: text,
-                sender: myUid,
-                senderName: currentUserProfile.name,
-                createdAt: serverTimestamp()
-            });
-            messageInput.value = ""; 
-        } catch (error) {
-            console.error("Message failed:", error);
+        for (const msgDoc of snapshot.docs) {
+            const data = msgDoc.data();
+            
+            if (data.roomId && data.roomId.includes(myUid)) {
+                if (data.roomId === 'akatare_official_system') continue;
+
+                if (!processedRooms.has(data.roomId)) {
+                    processedRooms.add(data.roomId);
+
+                    const parts = data.roomId.split('_');
+                    const otherUid = parts.find(id => id !== myUid);
+                    
+                    // Note: You can also cache business names in a separate 
+                    // localStorage key to speed up the 'getDoc' part
+                    let businessDisplayName = "Akatare Seller";
+
+                    if (otherUid) {
+                        const userRef = doc(db, "users", otherUid);
+                        const userSnap = await getDoc(userRef);
+                        if (userSnap.exists()) {
+                            businessDisplayName = userSnap.data().businessName || userSnap.data().name || "Seller";
+                        }
+                    }
+
+                    const cleanBusinessName = initName(businessDisplayName);
+                    const time = data.createdAt ? data.createdAt.toDate().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
+
+                    newListHtml += `
+                        <div class="chat-item" onclick="openChat('${data.roomId}', '${cleanBusinessName}', false)">
+                            <div class="avatar">
+                                <img src="https://ui-avatars.com/api/?name=${cleanBusinessName}&background=075211&color=fff">
+                            </div>
+                            <div class="chat-info">
+                                <div class="chat-top">
+                                    <span class="name" style="color: #075211;">${cleanBusinessName}</span>
+                                    <span class="time">${time}</span>
+                                </div>
+                                <span class="last-msg">${data.text || "📷 Image"}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
         }
-    }
-}
 
-// 4. Real-time Message Listener
-function loadMessages(myUid) {
-    if (!activeRoomId) return;
-
-    const q = query(
-        collection(db, "messages"),
-        where("roomId", "==", activeRoomId),
-        orderBy("createdAt", "asc")
-    );
-
-    
-
-    onSnapshot(q, (snapshot) => {
-        // Clear previous bubbles to avoid duplicates on redraw
-        const bubbles = document.querySelectorAll('.msg-bubble');
-        bubbles.forEach(b => b.remove());
-
-        snapshot.forEach((doc) => {
-            const msg = doc.data();
-            const isMe = msg.sender === myUid;
-            
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `msg-bubble ${isMe ? 'msg-sent' : 'msg-received'}`;
-            
-            // Format time
-            const time = msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
-
-            msgDiv.innerHTML = `
-                <div class="msg-content">
-                    <p>${msg.text}</p>
-                    <span class="msg-time" style="font-size:10px; opacity:0.7; display:block; text-align:right;">${time}</span>
-                </div>
-            `;
-            
-            // Insert before the footer input
-            chatContainer.insertBefore(msgDiv, document.querySelector('.foot'));
-        });
-
-        // Scroll to bottom
-        window.scrollTo(0, document.body.scrollHeight);
+        // 2. UPDATE UI & REFRESH CACHE
+        list.innerHTML = newListHtml;
+        localStorage.setItem(`cache_inbox_${myUid}`, newListHtml);
     });
 }
+
+
+
+window.openChat = function(roomId, name, isOfficial) {
+    localStorage.setItem('currentRoomId', roomId);
+    localStorage.setItem('chatWithName', name);
+    localStorage.setItem('isOfficialChannel', isOfficial);
+    window.location.href = 'chat-view.html';
+};
