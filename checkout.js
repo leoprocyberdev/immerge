@@ -21,10 +21,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const myId = urlParams.get('id');
 
 if (!myId) {
-    // Redirect back to home if someone visits checkout.html without an ID
+    // Redirect back to home if someone visits checkout without an ID
     window.location.href = "./";
 }
-
 
 // --- 1. UI STYLING ---
 const style = document.createElement('style');
@@ -50,7 +49,7 @@ document.body.appendChild(viewer);
 // --- 2. AUTH & INITIALIZATION ---
 onAuthStateChanged(auth, (user) => {
     if (!user) {
-        window.location.href = "login";
+        window.location.href = "login.html";
     } else {
         initPage(user);
     }
@@ -74,24 +73,25 @@ async function initPage(currentUser) {
     try {
         const docRef = doc(db, "products", myId);
         const docSnap = await getDoc(docRef);
+        
         if (docSnap.exists()) {
             const freshProduct = docSnap.data();
             localStorage.setItem(`cache_${myId}`, JSON.stringify(freshProduct));
-            renderHTML(freshProduct, currentUser); //updating the page title
-            if (snap.exists()) {
-    const product = snap.data();
-    
-    // Update the browser tab title
-    document.title = `${product.name} | Akatare Market`;
-    
-    // Attempt to update meta tags (works for some smart browsers/search engines)
-    document.querySelector('meta[property="og:title"]').setAttribute("content", product.name);
-    document.querySelector('meta[property="og:image"]').setAttribute("content", product.image);
-}
-
             
+            // Safely update the browser tab title and meta tags
+            document.title = `${freshProduct.name} | Akatare Market`;
+            
+            const metaTitle = document.querySelector('meta[property="og:title"]');
+            if (metaTitle) metaTitle.setAttribute("content", freshProduct.name);
+            
+            const metaImg = document.querySelector('meta[property="og:image"]');
+            if (metaImg) metaImg.setAttribute("content", freshProduct.image);
+
+            renderHTML(freshProduct, currentUser); 
         }
-    } catch (e) { console.error("Firebase update failed", e); }
+    } catch (e) { 
+        console.error("Firebase update failed", e); 
+    }
 }
 
 // --- 3. RENDER UI ---
@@ -124,7 +124,7 @@ function renderHTML(product, currentUser) {
                 </div>
 
                 <div style="margin-top:20px;">
-                    <span style="font-size:24px; font-weight:bold; color:#076e3b;">${fmtCurrency(product.price.amount)} ${product.price.currency.toUpperCase()}</span>
+                    <span style="font-size:24px; font-weight:bold; color:#076e3b;">${fmtCurrency ? fmtCurrency(product.price.amount) : product.price.amount} ${product.price.currency.toUpperCase()}</span>
                     <button id="like-btn" style="float:right; background:none; border:1px solid #ddd; padding:5px 12px; border-radius:20px; cursor:pointer;">
                         👍 <span id="like-count">${product.likes || 0}</span>
                     </button>
@@ -205,8 +205,10 @@ function attachEvents(product, user, sellerName, sellerContact) {
             }
             
             const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            if (toast) {
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            }
         };
     }
 
@@ -219,11 +221,19 @@ function attachEvents(product, user, sellerName, sellerContact) {
         };
     }
 
-    // Messaging logic
+    // Messaging logic (UPDATED WITH PREFILL)
     if (msgBtn) {
         msgBtn.onclick = () => {
             localStorage.setItem('chatWithName', sellerName);
             localStorage.setItem('chatWithContact', sellerContact);
+            
+            // Store the prefill message for chat-view.js to catch
+            const prefillText = `Hello! I am interested in your ${product.name} priced at ${product.price.amount} ${product.price.currency.toUpperCase()}. Is it still available?`;
+            localStorage.setItem('draftMessage', prefillText);
+            
+            // Ensure we aren't loading the official room by accident
+            localStorage.setItem('isOfficialChannel', 'false');
+
             const roomId = [user.uid, product.seller.uid].sort().join('_');
             localStorage.setItem('currentRoomId', roomId);
             window.location.href = "chat-view.html";
