@@ -1,5 +1,5 @@
 import { db, auth } from './db-init.js';
-import { collection, query, onSnapshot, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { collection, query, onSnapshot, orderBy, doc, getDoc, where } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 // Helper to format names: "johns stores" -> "Johns Stores"
@@ -19,12 +19,13 @@ onAuthStateChanged(auth, (user) => {
 async function loadConversations(myUid) {
     const list = document.getElementById('dynamic-business-list');
     
-    // 1. INSTANT LOAD: Check if we have a saved version on the phone
+    // 1. INSTANT LOAD: Check for cached version
     const cachedChats = localStorage.getItem(`cache_inbox_${myUid}`);
     if (cachedChats) {
-        list.innerHTML = cachedChats; // Shows the old list immediately
+        list.innerHTML = cachedChats; 
     }
 
+    // Query messages ordered by time
     const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
 
     onSnapshot(q, async (snapshot) => {
@@ -34,6 +35,7 @@ async function loadConversations(myUid) {
         for (const msgDoc of snapshot.docs) {
             const data = msgDoc.data();
             
+            // Check if user is part of this chat room
             if (data.roomId && data.roomId.includes(myUid)) {
                 if (data.roomId === 'akatare_official_system') continue;
 
@@ -43,10 +45,9 @@ async function loadConversations(myUid) {
                     const parts = data.roomId.split('_');
                     const otherUid = parts.find(id => id !== myUid);
                     
-                    // Note: You can also cache business names in a separate 
-                    // localStorage key to speed up the 'getDoc' part
                     let businessDisplayName = "Akatare Seller";
 
+                    // Fetch Business Name for the partner
                     if (otherUid) {
                         const userRef = doc(db, "users", otherUid);
                         const userSnap = await getDoc(userRef);
@@ -58,6 +59,19 @@ async function loadConversations(myUid) {
                     const cleanBusinessName = initName(businessDisplayName);
                     const time = data.createdAt ? data.createdAt.toDate().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
 
+                    // --- DEBUGGED LAST MESSAGE LOGIC ---
+                    let lastMsgDisplay = "";
+                    if (data.text) {
+                        lastMsgDisplay = data.text;
+                    } else if (data.audioUrl) {
+                        lastMsgDisplay = "🎤 Voice note";
+                    } else if (data.imageUrl) {
+                        lastMsgDisplay = "📷 Image";
+                    } else {
+                        lastMsgDisplay = "New message";
+                    }
+                    // ------------------------------------
+
                     newListHtml += `
                         <div class="chat-item" onclick="openChat('${data.roomId}', '${cleanBusinessName}', false)">
                             <div class="avatar">
@@ -68,7 +82,7 @@ async function loadConversations(myUid) {
                                     <span class="name" style="color: #075211;">${cleanBusinessName}</span>
                                     <span class="time">${time}</span>
                                 </div>
-                                <span class="last-msg">${data.text || "📷 Image"}</span>
+                                <span class="last-msg">${lastMsgDisplay}</span>
                             </div>
                         </div>
                     `;
@@ -77,12 +91,14 @@ async function loadConversations(myUid) {
         }
 
         // 2. UPDATE UI & REFRESH CACHE
-        list.innerHTML = newListHtml;
-        localStorage.setItem(`cache_inbox_${myUid}`, newListHtml);
+        if (newListHtml !== "") {
+            list.innerHTML = newListHtml;
+            localStorage.setItem(`cache_inbox_${myUid}`, newListHtml);
+        } else {
+            list.innerHTML = `<div style="text-align:center; color:#8696a0; margin-top:20px;">No conversations yet.</div>`;
+        }
     });
 }
-
-
 
 window.openChat = function(roomId, name, isOfficial) {
     localStorage.setItem('currentRoomId', roomId);
